@@ -15,6 +15,7 @@ public class ConnectionManager {
 	public void connect(String host,int port){
 		try {
 			client=new Socket(host,port);
+			ConsoleManager.print("Connection to MSRG Echo server established: /"+host+" / "+port);
 		} catch (UnknownHostException e) {
 			//ConsoleManager.print("Don't know about host: ")
 		} catch (IOException e) {
@@ -27,6 +28,7 @@ public class ConnectionManager {
 	public void disconnect(){
 		try {
 			client.close();
+			ConsoleManager.print("Connection terminated: /"+client.getLocalAddress()+" / "+client.getLocalPort());
 		} catch (IOException e) {
 			//TODO print io exception 
 		}
