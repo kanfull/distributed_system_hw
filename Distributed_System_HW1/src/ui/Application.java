@@ -31,7 +31,7 @@ public class Application {
 							ConsoleManager.print("Syntax Error");
 						}
 						
-					}if(command.equals("disconnect")){
+					}else if(command.equals("disconnect")){
 						
 						if(tokens.length==1){
 							manager.disconnect();
