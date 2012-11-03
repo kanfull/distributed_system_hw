@@ -1,36 +1,70 @@
 package ui;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
 
 public class ConnectionManager {
 	Socket client;
-	PrintWriter out;
-	BufferedReader in;
+	LogManager logManager;
+	InputStream in;
+	OutputStream out;
+	
+	ConnectionManager(LogManager manager){
+		this.logManager=manager;
+	}
 	
 	public void connect(String host,int port){
 		try {
 			client=new Socket(host,port);
-			ConsoleManager.print("Connection to MSRG Echo server established: /"+host+" / "+port);
+			in = client.getInputStream();
+			out = client.getOutputStream();
+
+			String result=new String(this.receive());
+			result=result.substring(0, result.lastIndexOf("\n"));
+			this.logManager.print(result);
 		} catch (UnknownHostException e) {
-			//ConsoleManager.print("Don't know about host: ")
+			this.logManager.print("Do not know host");
 		} catch (IOException e) {
-			//TODO print io exception
+			this.logManager.print("Error! Not connected!");
 		}
 	}
 	public void send(String message){
-
+		try {		
+			this.send(message.getBytes());
+			
+			String result=new String(this.receive());
+			result=result.substring(0, result.lastIndexOf("\n"));
+			this.logManager.print(result);
+			
+		} catch (NullPointerException e) {
+			this.logManager.print("Error! Not connected!");
+		} catch (IOException e) {
+			this.logManager.print("Error! Not connected!");
+		}
 	}
 	public void disconnect(){
 		try {
+			in.close();
+			out.close();
 			client.close();
-			ConsoleManager.print("Connection terminated: /"+client.getLocalAddress()+" / "+client.getLocalPort());
+			this.logManager.print("Connection terminated: "+client.getInetAddress()+" / "+client.getPort());
 		} catch (IOException e) {
-			//TODO print io exception 
+			this.logManager.print("Error! Not connected!");
 		}
 	}
+	
+	private void send(byte[] data) throws IOException{
+		out.write(data);
+		out.write("\r\n".getBytes());
+		out.flush();
+	}
+	private byte[] receive() throws IOException{
+		byte[] result=new byte[128000];
+		in.read(result);
+		return result;
+	}
+
 }
