@@ -3,6 +3,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import org.apache.log4j.ConsoleAppender;
+import org.apache.log4j.FileAppender;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PatternLayout;
+import org.apache.log4j.SimpleLayout;
 
 public class Application {
 	public static void main(String[] args){
@@ -64,5 +69,14 @@ public class Application {
 				e.printStackTrace();
 			} 
 		}
+		
+		Logger mylogger = Logger.getLogger(Application.class);
+		String logDir = "./logs/clent.log";
+		String pattern = "%d{ISO8601} %-5p [%t] %c: %m%n";
+		SimpleLayout sL = new SimpleLayout();
+		ConsoleAppender cA = new ConsoleAppender(sL);
+		mylogger.addAppender(cA);
+		mylogger.info("Hello");
+		
 	}
 }

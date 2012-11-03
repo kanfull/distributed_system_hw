@@ -16,7 +16,7 @@ public class ConnectionManager {
 		try {
 			client=new Socket(host,port);
 		} catch (UnknownHostException e) {
-			//TODO print unknown host
+			//ConsoleManager.print("Don't know about host: ")
 		} catch (IOException e) {
 			//TODO print io exception
 		}
