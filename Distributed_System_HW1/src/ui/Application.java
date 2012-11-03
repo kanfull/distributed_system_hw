@@ -71,7 +71,7 @@ public class Application {
 		}
 		
 		Logger mylogger = Logger.getLogger(Application.class);
-		String logDir = "./logs/clent.log";
+		String logDir = "./logs/client.log";
 		String pattern = "%d{ISO8601} %-5p [%t] %c: %m%n";
 		SimpleLayout sL = new SimpleLayout();
 		ConsoleAppender cA = new ConsoleAppender(sL);
